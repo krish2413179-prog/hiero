@@ -19,7 +19,7 @@ export class MirrorClient {
   constructor(context: HieroContext) {
     this.context = context;
     this.axios = axios.create({
-      baseURL: `${context.getMirrorNodeUrl()}/api/v1`,
+      baseURL: `${context.getMirrorNodeUrl()}/api/v1/`,
     });
   }
 
