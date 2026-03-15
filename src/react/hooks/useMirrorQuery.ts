@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useHiero } from '../provider.js';
 import { MirrorClient } from '../../mirror/client.js';
+import React from 'react';
 
 export function useMirrorQuery<T>(
   queryFn: (client: MirrorClient) => Promise<T>
@@ -34,4 +35,4 @@ export function useMirrorQuery<T>(
   return { data, loading, error };
 }
 
-import React from 'react';
+
