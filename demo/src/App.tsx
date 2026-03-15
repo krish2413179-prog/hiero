@@ -8,18 +8,31 @@ interface NetworkStatsProps {
 function NetworkStats({ refreshKey }: NetworkStatsProps) {
   const { data: supply, loading } = useMirrorQuery(m => m.getNetworkSupply(), [refreshKey])
   
+  React.useEffect(() => {
+    if (supply) {
+      console.log('Hiero Supply Data:', supply);
+    }
+  }, [supply]);
+
   if (loading) return <div className="loading-spinner"></div>
   
   return (
-    <div className="grid">
-      <div className="glass-card">
-        <div className="stat-label">HBAR Total Supply</div>
-        <div className="stat-value">{Number(supply?.total_supply || 0) / 100000000} HBAR</div>
+    <div>
+      <div className="grid">
+        <div className="glass-card">
+          <div className="stat-label">HBAR Total Supply</div>
+          <div className="stat-value">{Number(supply?.total_supply || supply?.total || 0) / 100000000} HBAR</div>
+        </div>
+        <div className="glass-card">
+          <div className="stat-label">HBAR Circulating Supply</div>
+          <div className="stat-value">{Number(supply?.released_supply || supply?.circulating || 0) / 100000000} HBAR</div>
+        </div>
       </div>
-      <div className="glass-card">
-        <div className="stat-label">HBAR Circulating Supply</div>
-        <div className="stat-value">{Number(supply?.released_supply || 0) / 100000000} HBAR</div>
-      </div>
+      {!supply?.total_supply && !supply?.total && (
+        <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#ef4444' }}>
+          Debug: {JSON.stringify(supply)}
+        </div>
+      )}
     </div>
   )
 }
