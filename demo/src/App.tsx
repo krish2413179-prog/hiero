@@ -44,15 +44,22 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
   };
 
   return (
-    <div className="grid">
-      <div className="glass-card">
-        <div className="stat-label">HBAR Total Supply</div>
-        <div className="stat-value">{formatHbar(supply?.total_supply || supply?.total)} HBAR</div>
+    <div>
+      <div className="grid">
+        <div className="glass-card">
+          <div className="stat-label">HBAR Total Supply</div>
+          <div className="stat-value">{formatHbar(supply?.total_supply || supply?.total)} HBAR</div>
+          <div style={{ fontSize: '10px', opacity: 0.5, marginTop: '4px' }}>Key: {supply?.total_supply ? 'total_supply' : (supply?.total ? 'total' : 'none')}</div>
+        </div>
+        <div className="glass-card">
+          <div className="stat-label">HBAR Circulating Supply</div>
+          <div className="stat-value">{formatHbar(supply?.released_supply || supply?.released || supply?.circulating)} HBAR</div>
+          <div style={{ fontSize: '10px', opacity: 0.5, marginTop: '4px' }}>Key: {supply?.released_supply ? 'released_supply' : (supply?.released ? 'released' : 'none')}</div>
+        </div>
       </div>
-      <div className="glass-card">
-        <div className="stat-label">HBAR Circulating Supply</div>
-        <div className="stat-value">{formatHbar(supply?.released_supply || supply?.circulating)} HBAR</div>
-      </div>
+      <pre style={{ fontSize: '0.7rem', color: '#64748b', background: 'rgba(0,0,0,0.2)', padding: '0.5rem', borderRadius: '4px', overflow: 'auto', maxHeight: '100px' }}>
+        RAW: {JSON.stringify(supply)}
+      </pre>
     </div>
   )
 }
