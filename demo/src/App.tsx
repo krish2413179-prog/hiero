@@ -2,7 +2,7 @@ import React from 'react'
 import { useMirrorQuery } from '../../src/index'
 
 function NetworkStats() {
-  const { data: supply, loading } = useMirrorQuery(m => m.getNetworkSupply())
+  const { data: supply, loading } = useMirrorQuery(m => m.getNetworkSupply(), [])
   
   if (loading) return <div className="loading-spinner"></div>
   
@@ -21,7 +21,7 @@ function NetworkStats() {
 }
 
 function LatestBlocks() {
-  const { data: blocks, loading } = useMirrorQuery(m => m.getBlocks(5))
+  const { data: blocks, loading } = useMirrorQuery(m => m.getBlocks(5), [])
   
   if (loading) return <div className="loading-spinner"></div>
   
