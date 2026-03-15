@@ -11,23 +11,24 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
   React.useEffect(() => {
     if (supply) {
       console.log('Hiero Supply Data:', supply);
-    }
-  }, [supply]);
+    if (supply) console.log('Supply Data:', supply);
+    if (error) console.error('Supply Error:', error);
+  }, [supply, error]);
 
+  if (loading) return <div className="loading-spinner"></div>
+  if (error) return <div style={{ color: '#ef4444', padding: '1rem', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px' }}>Error: {error.message}</div>
+  
   const formatHbar = (tinybar?: string | number) => {
     if (!tinybar) return '0';
     try {
       const val = typeof tinybar === 'string' ? BigInt(tinybar) : BigInt(Math.floor(Number(tinybar)));
-      // Divide by 10^8 for HBAR
       const hbar = Number(val) / 100_000_000;
-      return hbar.toLocaleString();
+      return hbar.toLocaleString(undefined, { maximumFractionDigits: 0 });
     } catch (e) {
       return '0';
     }
   };
 
-  if (loading) return <div className="loading-spinner"></div>
-  
   return (
     <div>
       <div className="grid">
@@ -40,11 +41,6 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
           <div className="stat-value">{formatHbar(supply?.released_supply || supply?.circulating)} HBAR</div>
         </div>
       </div>
-      {!supply?.total_supply && !supply?.total && (
-        <div style={{ marginTop: '1rem', fontSize: '0.75rem', color: '#ef4444' }}>
-          Debug: {JSON.stringify(supply)}
-        </div>
-      )}
     </div>
   )
 }
@@ -54,9 +50,10 @@ interface LatestBlocksProps {
 }
 
 function LatestBlocks({ refreshKey }: LatestBlocksProps) {
-  const { data: blocks, loading } = useMirrorQuery(m => m.getBlocks(5), [refreshKey])
+  const { data: blocks, loading, error } = useMirrorQuery(m => m.getBlocks(5), [refreshKey])
   
   if (loading) return <div className="loading-spinner"></div>
+  if (error) return <div style={{ color: '#ef4444', padding: '1rem', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px' }}>Error: {error.message}</div>
   
   return (
     <div className="glass-card">
