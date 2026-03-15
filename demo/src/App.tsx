@@ -1,8 +1,12 @@
 import React from 'react'
 import { useMirrorQuery } from '../../src/index'
 
-function NetworkStats() {
-  const { data: supply, loading } = useMirrorQuery(m => m.getNetworkSupply(), [])
+interface NetworkStatsProps {
+  refreshKey: number;
+}
+
+function NetworkStats({ refreshKey }: NetworkStatsProps) {
+  const { data: supply, loading } = useMirrorQuery(m => m.getNetworkSupply(), [refreshKey])
   
   if (loading) return <div className="loading-spinner"></div>
   
@@ -10,18 +14,22 @@ function NetworkStats() {
     <div className="grid">
       <div className="glass-card">
         <div className="stat-label">HBAR Total Supply</div>
-        <div className="stat-value">{Number(supply?.total || 0) / 100000000} HBAR</div>
+        <div className="stat-value">{Number(supply?.total_supply || 0) / 100000000} HBAR</div>
       </div>
       <div className="glass-card">
         <div className="stat-label">HBAR Circulating Supply</div>
-        <div className="stat-value">{Number(supply?.circulating || 0) / 100000000} HBAR</div>
+        <div className="stat-value">{Number(supply?.released_supply || 0) / 100000000} HBAR</div>
       </div>
     </div>
   )
 }
 
-function LatestBlocks() {
-  const { data: blocks, loading } = useMirrorQuery(m => m.getBlocks(5), [])
+interface LatestBlocksProps {
+  refreshKey: number;
+}
+
+function LatestBlocks({ refreshKey }: LatestBlocksProps) {
+  const { data: blocks, loading } = useMirrorQuery(m => m.getBlocks(5), [refreshKey])
   
   if (loading) return <div className="loading-spinner"></div>
   
@@ -41,9 +49,33 @@ function LatestBlocks() {
 }
 
 function App() {
+  const [refreshKey, setRefreshKey] = React.useState(0);
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+  };
+
   return (
     <div className="dashboard">
-      <h1 className="title">Hiero TS Utilities Showcase</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <h1 className="title" style={{ marginBottom: 0 }}>Hiero TS Utilities Showcase</h1>
+        <button 
+          onClick={handleRefresh}
+          className="refresh-btn"
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'rgba(56, 189, 248, 0.1)',
+            border: '1px solid rgba(56, 189, 248, 0.2)',
+            borderRadius: '8px',
+            color: '#38bdf8',
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            transition: 'all 0.2s'
+          }}
+        >
+          Refresh Data
+        </button>
+      </div>
       
       <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
         This demo uses the <code>&lt;HieroProvider&gt;</code> and <code>useMirrorQuery</code> hook 
@@ -53,12 +85,12 @@ function App() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         <section>
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Network Supply</h2>
-          <NetworkStats />
+          <NetworkStats refreshKey={refreshKey} />
         </section>
 
         <section>
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Chain Activity</h2>
-          <LatestBlocks />
+          <LatestBlocks refreshKey={refreshKey} />
         </section>
       </div>
     </div>
