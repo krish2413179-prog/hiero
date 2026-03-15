@@ -1,26 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useHiero } from './provider.js';
+import { useMemo } from 'react';
+import { useHiero } from '../provider.js';
+import { MirrorClient } from '../../mirror/client.js';
 
-/**
- * useMirrorQuery declaratively fetches data from the Mirror Node.
- */
 export function useMirrorQuery<T>(
-  queryFn: (mirror: any) => Promise<T>,
-  deps: any[] = []
+  queryFn: (client: MirrorClient) => Promise<T>
 ) {
   const { mirror } = useHiero();
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = React.useState<T | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<Error | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
     setLoading(true);
-
     queryFn(mirror)
-      .then((result) => {
+      .then((res) => {
         if (mounted) {
-          setData(result);
+          setData(res);
           setLoading(false);
         }
       })
@@ -30,9 +26,12 @@ export function useMirrorQuery<T>(
           setLoading(false);
         }
       });
-
-    return () => { mounted = false; };
-  }, [mirror, ...deps]);
+    return () => {
+      mounted = false;
+    };
+  }, [queryFn, mirror]);
 
   return { data, loading, error };
 }
+
+import React from 'react';
