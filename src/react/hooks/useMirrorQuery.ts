@@ -27,14 +27,14 @@ export function useMirrorQuery<T>(
     setLoading(true);
     
     queryFnRef.current(mirror)
-      .then((res) => {
+      .then((res: T) => {
         if (mounted) {
           setData(res);
           setLoading(false);
           setError(null);
         }
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         if (mounted) {
           setError(err);
           setLoading(false);
