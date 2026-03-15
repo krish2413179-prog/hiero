@@ -45,7 +45,7 @@ export class MirrorClient {
    * Fetches account details by ID.
    */
   async getAccount(accountId: string) {
-    const response = await this.axios.get(`/accounts/${accountId}`);
+    const response = await this.axios.get(`accounts/${accountId}`);
     return response.data;
   }
 
@@ -53,14 +53,14 @@ export class MirrorClient {
    * Fetches transactions for an account with optional filters.
    */
   async getTransactions(accountId: string, limit: number = 25) {
-    return this.get(`/transactions`, { "account.id": accountId, limit });
+    return this.get(`transactions`, { "account.id": accountId, limit });
   }
 
   /**
    * Fetches token balances for an account.
    */
   async getTokenBalances(accountId: string) {
-    const response = await this.axios.get(`/accounts/${accountId}/tokens`);
+    const response = await this.axios.get(`accounts/${accountId}/tokens`);
     return response.data.tokens;
   }
 
@@ -68,7 +68,7 @@ export class MirrorClient {
    * Fetches the total and circulating supply of HBAR.
    */
   async getNetworkSupply() {
-    const response = await this.axios.get("/network/supply");
+    const response = await this.axios.get("network/supply");
     return response.data;
   }
 
@@ -76,13 +76,13 @@ export class MirrorClient {
    * Fetches latest blocks from the network.
    */
   async getBlocks(limit: number = 25) {
-    return this.get("/blocks", { limit });
+    return this.get("blocks", { limit });
   }
 
   /**
    * Fetches messages for a specific consensus topic.
    */
   async getTopicMessages(topicId: string, limit: number = 25) {
-    return this.get(`/topics/${topicId}/messages`, { limit });
+    return this.get(`topics/${topicId}/messages`, { limit });
   }
 }

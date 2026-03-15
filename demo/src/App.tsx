@@ -44,22 +44,33 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <div className="grid">
         <div className="glass-card">
           <div className="stat-label">HBAR Total Supply</div>
           <div className="stat-value">{formatHbar(supply?.total_supply || supply?.total)} HBAR</div>
-          <div style={{ fontSize: '10px', opacity: 0.5, marginTop: '4px' }}>Key: {supply?.total_supply ? 'total_supply' : (supply?.total ? 'total' : 'none')}</div>
+          <div style={{ fontSize: '10px', color: '#38bdf8', marginTop: '4px' }}>Key: {supply?.total_supply ? 'total_supply' : (supply?.total ? 'total' : 'NONE')}</div>
         </div>
         <div className="glass-card">
           <div className="stat-label">HBAR Circulating Supply</div>
           <div className="stat-value">{formatHbar(supply?.released_supply || supply?.released || supply?.circulating)} HBAR</div>
-          <div style={{ fontSize: '10px', opacity: 0.5, marginTop: '4px' }}>Key: {supply?.released_supply ? 'released_supply' : (supply?.released ? 'released' : 'none')}</div>
+          <div style={{ fontSize: '10px', color: '#38bdf8', marginTop: '4px' }}>Key: {supply?.released_supply ? 'released_supply' : (supply?.released ? 'released' : 'NONE')}</div>
         </div>
       </div>
-      <pre style={{ fontSize: '0.7rem', color: '#64748b', background: 'rgba(0,0,0,0.2)', padding: '0.5rem', borderRadius: '4px', overflow: 'auto', maxHeight: '100px' }}>
-        RAW: {JSON.stringify(supply)}
-      </pre>
+      <div style={{ 
+        marginTop: '1rem', 
+        padding: '1rem', 
+        background: '#0f172a', 
+        border: '1px solid #334155', 
+        borderRadius: '8px',
+        color: '#f8fafc',
+        fontSize: '0.8rem'
+      }}>
+        <div style={{ fontWeight: 'bold', color: '#38bdf8', marginBottom: '0.5rem' }}>🔧 Diagnostic Data:</div>
+        <div style={{ wordBreak: 'break-all', fontFamily: 'monospace' }}>
+          {supply ? JSON.stringify(supply) : 'DATA IS NULL/UNDEFINED'}
+        </div>
+      </div>
     </div>
   )
 }
