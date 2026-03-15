@@ -14,6 +14,18 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
     }
   }, [supply]);
 
+  const formatHbar = (tinybar?: string | number) => {
+    if (!tinybar) return '0';
+    try {
+      const val = typeof tinybar === 'string' ? BigInt(tinybar) : BigInt(Math.floor(Number(tinybar)));
+      // Divide by 10^8 for HBAR
+      const hbar = Number(val) / 100_000_000;
+      return hbar.toLocaleString();
+    } catch (e) {
+      return '0';
+    }
+  };
+
   if (loading) return <div className="loading-spinner"></div>
   
   return (
@@ -21,11 +33,11 @@ function NetworkStats({ refreshKey }: NetworkStatsProps) {
       <div className="grid">
         <div className="glass-card">
           <div className="stat-label">HBAR Total Supply</div>
-          <div className="stat-value">{Number(supply?.total_supply || supply?.total || 0) / 100000000} HBAR</div>
+          <div className="stat-value">{formatHbar(supply?.total_supply || supply?.total)} HBAR</div>
         </div>
         <div className="glass-card">
           <div className="stat-label">HBAR Circulating Supply</div>
-          <div className="stat-value">{Number(supply?.released_supply || supply?.circulating || 0) / 100000000} HBAR</div>
+          <div className="stat-value">{formatHbar(supply?.released_supply || supply?.circulating)} HBAR</div>
         </div>
       </div>
       {!supply?.total_supply && !supply?.total && (
