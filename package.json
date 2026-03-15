@@ -1,6 +1,10 @@
 {
   "name": "heiro",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "demo"
+  ],
   "description": "Enterprise-grade TypeScript utilities for Hiero (Hedera) network development.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src --ext .ts,.tsx",
-    "build:demo": "npm install && npm install --prefix demo && vite build demo",
+    "build:demo": "vite build demo",
     "prepublishOnly": "npm run build"
   },
   "keywords": [],
